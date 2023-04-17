@@ -7,4 +7,6 @@
     <string name="up">up</string>
     <string name="down">down</string>
     <string name="new_game">New Game</string>
+    <string name="continue_btn">Continue</string>
+    <string name="settings">Settings</string>
 </resources>

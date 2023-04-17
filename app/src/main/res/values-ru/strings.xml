@@ -8,4 +8,6 @@
     <string name="up">вверх</string>
     <string name="down">вниз</string>
     <string name="new_game">Новая Игра</string>
+    <string name="continue_btn">Продолжить</string>
+    <string name="settings">Настройки</string>
 </resources>
