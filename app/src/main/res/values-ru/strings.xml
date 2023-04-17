@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">2048</string>
+    <string name="score">Счёт</string>
+    <string name="temp">Пусто.</string>
+    <string name="right">вправо</string>
+    <string name="left">влево</string>
+    <string name="up">вверх</string>
+    <string name="down">вниз</string>
+    <string name="new_game">Новая Игра</string>
+</resources>

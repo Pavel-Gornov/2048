@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">2048</string>
+    <string name="score">Score</string>
+    <string name="temp">none</string>
+    <string name="right">right</string>
+    <string name="left">left</string>
+    <string name="up">up</string>
+    <string name="down">down</string>
+    <string name="new_game">New Game</string>
+</resources>
