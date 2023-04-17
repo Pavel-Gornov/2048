@@ -1,21 +1,14 @@
 package com.example.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
-
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -59,25 +52,10 @@ public class GameActivity extends AppCompatActivity {
     public Bitmap n2048;
     public String score_text;
 
-    @SuppressLint("ObsoleteSdkInt")
-    protected void hide_navigation() {
-        View v = this.getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
-            v.setSystemUiVisibility(View.GONE);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            Window window = this.getWindow();
-            WindowCompat.setDecorFitsSystemWindows(window, false);
-            WindowInsetsControllerCompat controllerCompat = new WindowInsetsControllerCompat(window, v);
-            controllerCompat.hide(WindowInsetsCompat.Type.navigationBars());
-            controllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_game);
-        hide_navigation();
         TileMap = new Board();
         iv1_1 = findViewById(R.id.cell_1_1);
         iv1_2 = findViewById(R.id.cell_1_2);
