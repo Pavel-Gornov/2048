@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainMenuActivity extends AppCompatActivity {
+    protected Intent g;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,13 +15,17 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void btn_new_game_click(View view) {
-        Intent g = new Intent(this, GameActivity.class);
+        g = new Intent(this, GameActivity.class);
         startActivity(g);
     }
 
     public void btn_continue_click(View view) {
+        g = new Intent(this, GameActivity.class);
+        startActivity(g);
     }
 
     public void btn_settings_click(View view) {
+        g = new Intent(this, SettingsActivity.class);
+        startActivity(g);
     }
 }
