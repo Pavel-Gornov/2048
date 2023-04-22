@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,6 +53,33 @@ public class GameActivity extends AppCompatActivity {
     public Bitmap n1024;
     public Bitmap n2048;
     public String score_text;
+
+    public final float sensitivity = 100;
+
+    protected GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            if ((e1.getX() - e2.getX()) > sensitivity) {
+                left();
+            } else if ((e2.getX() - e1.getX()) > sensitivity) {
+                right();
+            } else if ((e1.getY() - e2.getY()) > sensitivity){
+                up();
+            } else if ((e2.getY() - e1.getY()) > sensitivity){
+                down();
+            }
+            return true;
+        }
+    };
+
+    protected GestureDetector gestureDetector = new GestureDetector(getBaseContext(), simpleOnGestureListener);
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,8 +186,7 @@ public class GameActivity extends AppCompatActivity {
         }
         tv_score.setText(score_text + ": " + score);
     }
-
-    public void btn_up_click(View view) {
+    public void up(){
         TileMap.transpose();
         TileMap.cover_up();
         TileMap.merge();
@@ -166,35 +194,48 @@ public class GameActivity extends AppCompatActivity {
         TileMap.transpose();
         TileMap.add_tile();
         update();
+    }
+    public void down(){
+        TileMap.transpose();
+        TileMap.reverse();
+        TileMap.cover_up();
+        TileMap.merge();
+        TileMap.cover_up();
+        TileMap.reverse();
+        TileMap.transpose();
+        TileMap.add_tile();
+        update();
+    }
+    public void left(){
+        TileMap.cover_up();
+        TileMap.merge();
+        TileMap.cover_up();
+        TileMap.add_tile();
+        update();
+    }
+    public void right(){
+        TileMap.reverse();
+        TileMap.cover_up();
+        TileMap.merge();
+        TileMap.cover_up();
+        TileMap.reverse();
+        TileMap.add_tile();
+        update();
+    }
+
+    public void btn_up_click(View view) {
+        up();
     }
 
     public void btn_left_click(View view) {
-        TileMap.cover_up();
-        TileMap.merge();
-        TileMap.cover_up();
-        TileMap.add_tile();
-        update();
+        left();
     }
 
     public void btn_right_click(View view) {
-        TileMap.reverse();
-        TileMap.cover_up();
-        TileMap.merge();
-        TileMap.cover_up();
-        TileMap.reverse();
-        TileMap.add_tile();
-        update();
+        right();
     }
 
     public void btn_down_click(View view) {
-        TileMap.transpose();
-        TileMap.reverse();
-        TileMap.cover_up();
-        TileMap.merge();
-        TileMap.cover_up();
-        TileMap.reverse();
-        TileMap.transpose();
-        TileMap.add_tile();
-        update();
+        down();
     }
 }

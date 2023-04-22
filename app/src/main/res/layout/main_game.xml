@@ -19,12 +19,12 @@
         android:id="@+id/game_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintTop_toTopOf="@id/score"
-        app:layout_constraintBottom_toTopOf="@id/btn_u"
         android:columnCount="4"
         android:orientation="horizontal"
         android:rowCount="4"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintTop_toTopOf="@id/score"
+        app:layout_constraintBottom_toTopOf="@id/btn_u"
         tools:ignore="UselessParent">
         <ImageView
             android:id="@+id/cell_1_1"
