@@ -8,6 +8,7 @@
     <TextView
         android:id="@+id/score"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20pt"
@@ -205,7 +206,7 @@
     </GridLayout>
 
     <Button
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:id="@+id/btn_u"
         android:onClick="btn_up_click"
         android:layout_width="match_parent"

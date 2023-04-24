@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
+    static boolean hideButtons;
 
     protected ImageView iv1_1;
     protected ImageView iv1_2;
@@ -107,6 +108,13 @@ public class GameActivity extends AppCompatActivity {
         btn_down = findViewById(R.id.btn_d);
         btn_right = findViewById(R.id.btn_r);
         btn_left = findViewById(R.id.btn_l);
+
+        if (hideButtons){
+            btn_up.setVisibility(View.INVISIBLE);
+            btn_down.setVisibility(View.INVISIBLE);
+            btn_right.setVisibility(View.INVISIBLE);
+            btn_left.setVisibility(View.INVISIBLE);
+        }
 
         tv_score = findViewById(R.id.score);
         score_text = getResources().getString(R.string.score);

@@ -19,7 +19,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void switch_1_click(View view) {
-        System.out.println(switch_1.isChecked());
-        System.out.println("Что-то произошло!!!!");
+        GameActivity.hideButtons  = switch_1.isChecked();
     }
 }
