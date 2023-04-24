@@ -105,4 +105,13 @@ public class Board {
         }
         return s.toString();
     }
+    public String toSaveString(){
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                out.append(map.get(j).get(i)).append(" ");
+            }
+        }
+        return out.toString();
+    }
 }

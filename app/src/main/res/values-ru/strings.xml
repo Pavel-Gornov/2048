@@ -10,4 +10,5 @@
     <string name="new_game">Новая Игра</string>
     <string name="continue_btn">Продолжить</string>
     <string name="settings">Настройки</string>
+    <string name="setting_1">Скрывать кнопки</string>
 </resources>

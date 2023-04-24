@@ -1,7 +1,10 @@
 package com.example.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,11 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
     static boolean hideButtons;
+    protected SharedPreferences sharedPref;
 
     protected ImageView iv1_1;
     protected ImageView iv1_2;
@@ -66,9 +71,9 @@ public class GameActivity extends AppCompatActivity {
                 left();
             } else if ((e2.getX() - e1.getX()) > sensitivity) {
                 right();
-            } else if ((e1.getY() - e2.getY()) > sensitivity){
+            } else if ((e1.getY() - e2.getY()) > sensitivity) {
                 up();
-            } else if ((e2.getY() - e1.getY()) > sensitivity){
+            } else if ((e2.getY() - e1.getY()) > sensitivity) {
                 down();
             }
             return true;
@@ -86,6 +91,8 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_game);
+        sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+        hideButtons = sharedPref.getBoolean(Keys.SWITCH_1_KEY, false);
         TileMap = new Board();
         iv1_1 = findViewById(R.id.cell_1_1);
         iv1_2 = findViewById(R.id.cell_1_2);
@@ -109,7 +116,7 @@ public class GameActivity extends AppCompatActivity {
         btn_right = findViewById(R.id.btn_r);
         btn_left = findViewById(R.id.btn_l);
 
-        if (hideButtons){
+        if (hideButtons) {
             btn_up.setVisibility(View.INVISIBLE);
             btn_down.setVisibility(View.INVISIBLE);
             btn_right.setVisibility(View.INVISIBLE);
@@ -118,6 +125,19 @@ public class GameActivity extends AppCompatActivity {
 
         tv_score = findViewById(R.id.score);
         score_text = getResources().getString(R.string.score);
+        load_textures();
+        update();
+    }
+
+    public void load_save() {
+//      TODO: Реализовать этот метод.
+    }
+
+    public void save_game(){
+
+    }
+
+    public void load_textures() {
         try {
             temp = BitmapFactory.decodeStream(this.getAssets().open("tiles/temp.png"));
             n0 = BitmapFactory.decodeStream(this.getAssets().open("tiles/0.png"));
@@ -135,7 +155,6 @@ public class GameActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        update();
     }
 
     public Bitmap get_texture(int n) {
@@ -194,7 +213,8 @@ public class GameActivity extends AppCompatActivity {
         }
         tv_score.setText(score_text + ": " + score);
     }
-    public void up(){
+
+    public void up() {
         TileMap.transpose();
         TileMap.cover_up();
         TileMap.merge();
@@ -203,7 +223,8 @@ public class GameActivity extends AppCompatActivity {
         TileMap.add_tile();
         update();
     }
-    public void down(){
+
+    public void down() {
         TileMap.transpose();
         TileMap.reverse();
         TileMap.cover_up();
@@ -214,14 +235,16 @@ public class GameActivity extends AppCompatActivity {
         TileMap.add_tile();
         update();
     }
-    public void left(){
+
+    public void left() {
         TileMap.cover_up();
         TileMap.merge();
         TileMap.cover_up();
         TileMap.add_tile();
         update();
     }
-    public void right(){
+
+    public void right() {
         TileMap.reverse();
         TileMap.cover_up();
         TileMap.merge();
@@ -245,5 +268,10 @@ public class GameActivity extends AppCompatActivity {
 
     public void btn_down_click(View view) {
         down();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
