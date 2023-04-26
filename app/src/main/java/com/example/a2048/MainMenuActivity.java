@@ -21,6 +21,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void btn_continue_click(View view) {
         g = new Intent(this, GameActivity.class);
+        g.putExtra(Keys.SAVE_KEY, true);
         startActivity(g);
     }
 

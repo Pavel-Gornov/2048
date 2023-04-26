@@ -14,12 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
-    static boolean hideButtons;
     protected SharedPreferences sharedPref;
 
     protected ImageView iv1_1;
@@ -43,6 +41,7 @@ public class GameActivity extends AppCompatActivity {
     protected Button btn_down;
     protected Button btn_right;
     protected Button btn_left;
+    protected ImageView img_no_btn;
     protected TextView tv_score;
     protected Board TileMap;
     public Bitmap temp;
@@ -92,8 +91,11 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_game);
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
-        hideButtons = sharedPref.getBoolean(Keys.SWITCH_1_KEY, false);
-        TileMap = new Board();
+        boolean is_continue = getIntent().getBooleanExtra(Keys.SAVE_KEY, false);
+        if (is_continue)
+            TileMap = new Board(sharedPref.getString(Keys.SAVE_KEY, Keys.DEFLATE_BOARD_STATE));
+        else
+            TileMap = new Board();
         iv1_1 = findViewById(R.id.cell_1_1);
         iv1_2 = findViewById(R.id.cell_1_2);
         iv1_3 = findViewById(R.id.cell_1_3);
@@ -115,26 +117,21 @@ public class GameActivity extends AppCompatActivity {
         btn_down = findViewById(R.id.btn_d);
         btn_right = findViewById(R.id.btn_r);
         btn_left = findViewById(R.id.btn_l);
+        img_no_btn = findViewById(R.id.img_no_btn);
 
-        if (hideButtons) {
-            btn_up.setVisibility(View.INVISIBLE);
-            btn_down.setVisibility(View.INVISIBLE);
-            btn_right.setVisibility(View.INVISIBLE);
-            btn_left.setVisibility(View.INVISIBLE);
+        if (sharedPref.getBoolean(Keys.SWITCH_1_KEY, false)) {
+            btn_up.setVisibility(View.GONE);
+            btn_down.setVisibility(View.GONE);
+            btn_right.setVisibility(View.GONE);
+            btn_left.setVisibility(View.GONE);
+            img_no_btn.setVisibility(View.VISIBLE);
+
         }
 
         tv_score = findViewById(R.id.score);
         score_text = getResources().getString(R.string.score);
         load_textures();
         update();
-    }
-
-    public void load_save() {
-//      TODO: Реализовать этот метод.
-    }
-
-    public void save_game(){
-
     }
 
     public void load_textures() {
@@ -271,7 +268,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Keys.SAVE_KEY, TileMap.toSaveString());
+        editor.apply();
     }
 }

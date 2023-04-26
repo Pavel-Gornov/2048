@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Board {
     public ArrayList<ArrayList<Integer>> map;
@@ -20,6 +21,18 @@ public class Board {
 
     public Board(ArrayList<ArrayList<Integer>> m) {
         map = m;
+    }
+
+    public Board(String save){
+        Scanner in = new Scanner(save);
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            temp.add(new ArrayList<>());
+            for (int j = 0; j < 4; j++) {
+                temp.get(i).add(in.nextInt());
+            }
+        }
+        map = temp;
     }
 
     public void add_tile() {
@@ -109,7 +122,7 @@ public class Board {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                out.append(map.get(j).get(i)).append(" ");
+                out.append(map.get(i).get(j)).append(" ");
             }
         }
         return out.toString();

@@ -30,8 +30,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(Keys.SWITCH_1_KEY, switch_state);
         editor.apply();
