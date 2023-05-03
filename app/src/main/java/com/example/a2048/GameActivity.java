@@ -3,7 +3,10 @@ package com.example.a2048;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -60,6 +65,7 @@ public class GameActivity extends AppCompatActivity {
     public String score_text;
 
     public final float sensitivity = 100;
+    protected boolean is_2048;
 
     protected GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
@@ -92,10 +98,18 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.main_game);
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         boolean is_continue = getIntent().getBooleanExtra(Keys.SAVE_KEY, false);
-        if (is_continue)
+        if (is_continue) {
             TileMap = new Board(sharedPref.getString(Keys.SAVE_KEY, Keys.DEFLATE_BOARD_STATE));
-        else
+            for (int i = 0; i < 4; i++) {
+                if (TileMap.map.get(i).contains(2048)) {
+                    is_2048 = true;
+                    break;
+                }
+            }
+        } else {
             TileMap = new Board();
+            is_2048 = false;
+        }
         iv1_1 = findViewById(R.id.cell_1_1);
         iv1_2 = findViewById(R.id.cell_1_2);
         iv1_3 = findViewById(R.id.cell_1_3);
@@ -125,7 +139,6 @@ public class GameActivity extends AppCompatActivity {
             btn_right.setVisibility(View.GONE);
             btn_left.setVisibility(View.GONE);
             img_no_btn.setVisibility(View.VISIBLE);
-
         }
 
         tv_score = findViewById(R.id.score);
@@ -217,6 +230,7 @@ public class GameActivity extends AppCompatActivity {
         TileMap.merge();
         TileMap.cover_up();
         TileMap.transpose();
+        check_lose_or_win();
         TileMap.add_tile();
         update();
     }
@@ -229,6 +243,7 @@ public class GameActivity extends AppCompatActivity {
         TileMap.cover_up();
         TileMap.reverse();
         TileMap.transpose();
+        check_lose_or_win();
         TileMap.add_tile();
         update();
     }
@@ -237,6 +252,7 @@ public class GameActivity extends AppCompatActivity {
         TileMap.cover_up();
         TileMap.merge();
         TileMap.cover_up();
+        check_lose_or_win();
         TileMap.add_tile();
         update();
     }
@@ -247,6 +263,7 @@ public class GameActivity extends AppCompatActivity {
         TileMap.merge();
         TileMap.cover_up();
         TileMap.reverse();
+        check_lose_or_win();
         TileMap.add_tile();
         update();
     }
@@ -267,11 +284,75 @@ public class GameActivity extends AppCompatActivity {
         down();
     }
 
+    public void check_lose_or_win(){
+        boolean a = true;
+        boolean b = true;
+        boolean c = true;
+        boolean d = true;
+        if (!is_2048) {
+            for (int i = 0; i < 4; i++) {
+                if (TileMap.map.get(i).contains(2048)) {
+                    is_2048 = true;
+                    createOn2048Dialog(this);
+                }
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            if (TileMap.map.get(i).contains(0)) {
+                a = false;
+                break;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (TileMap.map.get(i).get(j).equals(TileMap.map.get(i + 1).get(j)) || TileMap.map.get(i).get(j).equals(TileMap.map.get(i).get(j + 1))){
+                    b = false;
+                    break;
+                }
+            }
+            if (!b)
+                break;
+        }
+        for (int i = 0; i < 3; i++){
+            if (TileMap.map.get(3).get(i).equals(TileMap.map.get(3).get(i + 1))){
+                c = false;
+                break;
+            }
+        }
+        for (int i = 0; i < 3; i++){
+            if (TileMap.map.get(i).get(3).equals(TileMap.map.get(i + 1).get(3))){
+                d = false;
+                break;
+            }
+        }
+        if (a & b & c & d){
+            createFinalDialog(this);
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Keys.SAVE_KEY, TileMap.toSaveString());
         editor.apply();
+    }
+    public void createOn2048Dialog(Activity activity){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("2048!")
+                .setMessage("Цель в 2048 достигнута. Можете завершить игру или продолжать.")
+                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity,"Продолжаем!",Toast.LENGTH_SHORT).show())
+                .setNegativeButton("Завершить", (dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
+        builder.create().show();
+    }
+
+    public void createFinalDialog(Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Игра окончена!")
+                .setMessage("Игра окончена, ходов не осталось.")
+                .setNeutralButton( "Главное меню",(dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)))
+                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity,"Продолжаем!",Toast.LENGTH_SHORT).show())
+                .setNegativeButton("Новая игра", (dialog, id) -> {TileMap = new Board(); is_2048 = false; update();});
+        builder.create().show();
     }
 }
