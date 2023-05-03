@@ -11,4 +11,5 @@
     <string name="continue_btn">Продолжить</string>
     <string name="settings">Настройки</string>
     <string name="setting_1">Скрывать кнопки</string>
+    <string name="your_high_score">Ваш рекорд составляет:</string>
 </resources>

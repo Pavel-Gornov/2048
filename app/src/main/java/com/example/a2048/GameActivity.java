@@ -47,6 +47,7 @@ public class GameActivity extends AppCompatActivity {
     protected Button btn_right;
     protected Button btn_left;
     protected ImageView img_no_btn;
+    protected int score;
     protected TextView tv_score;
     protected Board TileMap;
     public Bitmap temp;
@@ -65,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
     public String score_text;
 
     public final float sensitivity = 100;
-    protected boolean is_2048;
+    protected boolean is_2048 = false;
 
     protected GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
@@ -108,7 +109,6 @@ public class GameActivity extends AppCompatActivity {
             }
         } else {
             TileMap = new Board();
-            is_2048 = false;
         }
         iv1_1 = findViewById(R.id.cell_1_1);
         iv1_2 = findViewById(R.id.cell_1_2);
@@ -215,7 +215,7 @@ public class GameActivity extends AppCompatActivity {
         iv4_2.setImageBitmap(get_texture(TileMap.map.get(3).get(1)));
         iv4_3.setImageBitmap(get_texture(TileMap.map.get(3).get(2)));
         iv4_4.setImageBitmap(get_texture(TileMap.map.get(3).get(3)));
-        int score = 0;
+        score = 0;
         for (ArrayList<Integer> i : TileMap.map) {
             for (int j : i) {
                 score += j;
@@ -284,7 +284,7 @@ public class GameActivity extends AppCompatActivity {
         down();
     }
 
-    public void check_lose_or_win(){
+    public void check_lose_or_win() {
         boolean a = true;
         boolean b = true;
         boolean c = true;
@@ -305,7 +305,7 @@ public class GameActivity extends AppCompatActivity {
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (TileMap.map.get(i).get(j).equals(TileMap.map.get(i + 1).get(j)) || TileMap.map.get(i).get(j).equals(TileMap.map.get(i).get(j + 1))){
+                if (TileMap.map.get(i).get(j).equals(TileMap.map.get(i + 1).get(j)) || TileMap.map.get(i).get(j).equals(TileMap.map.get(i).get(j + 1))) {
                     b = false;
                     break;
                 }
@@ -313,19 +313,19 @@ public class GameActivity extends AppCompatActivity {
             if (!b)
                 break;
         }
-        for (int i = 0; i < 3; i++){
-            if (TileMap.map.get(3).get(i).equals(TileMap.map.get(3).get(i + 1))){
+        for (int i = 0; i < 3; i++) {
+            if (TileMap.map.get(3).get(i).equals(TileMap.map.get(3).get(i + 1))) {
                 c = false;
                 break;
             }
         }
-        for (int i = 0; i < 3; i++){
-            if (TileMap.map.get(i).get(3).equals(TileMap.map.get(i + 1).get(3))){
+        for (int i = 0; i < 3; i++) {
+            if (TileMap.map.get(i).get(3).equals(TileMap.map.get(i + 1).get(3))) {
                 d = false;
                 break;
             }
         }
-        if (a & b & c & d){
+        if (a & b & c & d) {
             createFinalDialog(this);
         }
     }
@@ -337,11 +337,25 @@ public class GameActivity extends AppCompatActivity {
         editor.putString(Keys.SAVE_KEY, TileMap.toSaveString());
         editor.apply();
     }
-    public void createOn2048Dialog(Activity activity){
+    @Override
+    protected void onPause() {
+        super.onPause();
+        save_high_score();
+    }
+    public void save_high_score(){
+        int high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
+        if (score > high_score){
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt(Keys.HIGH_SCORE_KEY, score);
+            editor.apply();
+        }
+    }
+
+    public void createOn2048Dialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("2048!")
                 .setMessage("Цель в 2048 достигнута. Можете завершить игру или продолжать.")
-                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity,"Продолжаем!",Toast.LENGTH_SHORT).show())
+                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity, "Продолжаем!", Toast.LENGTH_SHORT).show())
                 .setNegativeButton("Завершить", (dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
         builder.create().show();
     }
@@ -350,9 +364,15 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Игра окончена!")
                 .setMessage("Игра окончена, ходов не осталось.")
-                .setNeutralButton( "Главное меню",(dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)))
-                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity,"Продолжаем!",Toast.LENGTH_SHORT).show())
-                .setNegativeButton("Новая игра", (dialog, id) -> {TileMap = new Board(); is_2048 = false; update();});
+                .setNeutralButton("Главное меню", (dialog, id) -> {startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    TileMap = new Board();})
+                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity, "Продолжаем!", Toast.LENGTH_SHORT).show())
+                .setNegativeButton("Новая игра", (dialog, id) -> {
+                    save_high_score();
+                    TileMap = new Board();
+                    is_2048 = false;
+                    update();
+                });
         builder.create().show();
     }
 }
