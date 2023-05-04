@@ -43,4 +43,28 @@
         app:layout_constraintStart_toEndOf="@+id/setting_1"
         app:layout_constraintTop_toBottomOf="@+id/settings_string"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
+    <TextView
+        android:id="@+id/setting_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setting_2"
+        android:textSize="12pt"
+        android:gravity="center"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintRight_toLeftOf="@+id/switch_2"
+        app:layout_constraintTop_toBottomOf="@+id/switch_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Switch
+        android:id="@+id/switch_2"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:minWidth="48dp"
+        android:onClick="switch_2_click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/setting_2"
+        app:layout_constraintStart_toEndOf="@+id/setting_2"
+        app:layout_constraintTop_toBottomOf="@+id/switch_1"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 </androidx.constraintlayout.widget.ConstraintLayout>

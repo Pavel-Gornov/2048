@@ -12,4 +12,5 @@
     <string name="settings">Настройки</string>
     <string name="setting_1">Скрывать кнопки</string>
     <string name="your_high_score">Ваш рекорд составляет:</string>
+    <string name="setting_2">Старые текстуры</string>
 </resources>

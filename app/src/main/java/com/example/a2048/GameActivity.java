@@ -140,28 +140,31 @@ public class GameActivity extends AppCompatActivity {
             btn_left.setVisibility(View.GONE);
             img_no_btn.setVisibility(View.VISIBLE);
         }
+        if (sharedPref.getBoolean(Keys.SWITCH_2_KEY, false))
+            load_textures("tiles_old");
+        else
+            load_textures("tiles");
 
         tv_score = findViewById(R.id.score);
         score_text = getResources().getString(R.string.score);
-        load_textures();
         update();
     }
 
-    public void load_textures() {
+    public void load_textures(String folder) {
         try {
-            temp = BitmapFactory.decodeStream(this.getAssets().open("tiles/temp.png"));
-            n0 = BitmapFactory.decodeStream(this.getAssets().open("tiles/0.png"));
-            n2 = BitmapFactory.decodeStream(this.getAssets().open("tiles/2.png"));
-            n4 = BitmapFactory.decodeStream(this.getAssets().open("tiles/4.png"));
-            n8 = BitmapFactory.decodeStream(this.getAssets().open("tiles/8.png"));
-            n16 = BitmapFactory.decodeStream(this.getAssets().open("tiles/16.png"));
-            n32 = BitmapFactory.decodeStream(this.getAssets().open("tiles/32.png"));
-            n64 = BitmapFactory.decodeStream(this.getAssets().open("tiles/64.png"));
-            n128 = BitmapFactory.decodeStream(this.getAssets().open("tiles/128.png"));
-            n256 = BitmapFactory.decodeStream(this.getAssets().open("tiles/256.png"));
-            n512 = BitmapFactory.decodeStream(this.getAssets().open("tiles/512.png"));
-            n1024 = BitmapFactory.decodeStream(this.getAssets().open("tiles/1024.png"));
-            n2048 = BitmapFactory.decodeStream(this.getAssets().open("tiles/2048.png"));
+            temp = BitmapFactory.decodeStream(this.getAssets().open(folder + "/temp.png"));
+            n0 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/0.png"));
+            n2 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/2.png"));
+            n4 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/4.png"));
+            n8 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/8.png"));
+            n16 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/16.png"));
+            n32 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/32.png"));
+            n64 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/64.png"));
+            n128 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/128.png"));
+            n256 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/256.png"));
+            n512 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/512.png"));
+            n1024 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/1024.png"));
+            n2048 = BitmapFactory.decodeStream(this.getAssets().open(folder + "/2048.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -337,14 +340,16 @@ public class GameActivity extends AppCompatActivity {
         editor.putString(Keys.SAVE_KEY, TileMap.toSaveString());
         editor.apply();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         save_high_score();
     }
-    public void save_high_score(){
+
+    public void save_high_score() {
         int high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
-        if (score > high_score){
+        if (score > high_score) {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putInt(Keys.HIGH_SCORE_KEY, score);
             editor.apply();
@@ -364,8 +369,10 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Игра окончена!")
                 .setMessage("Игра окончена, ходов не осталось.")
-                .setNeutralButton("Главное меню", (dialog, id) -> {startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                    TileMap = new Board();})
+                .setNeutralButton("Главное меню", (dialog, id) -> {
+                    startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    TileMap = new Board();
+                })
                 .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity, "Продолжаем!", Toast.LENGTH_SHORT).show())
                 .setNegativeButton("Новая игра", (dialog, id) -> {
                     save_high_score();
