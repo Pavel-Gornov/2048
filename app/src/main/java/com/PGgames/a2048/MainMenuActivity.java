@@ -1,4 +1,4 @@
-package com.example.a2048;
+package com.PGgames.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +22,7 @@ public class MainMenuActivity extends AppCompatActivity {
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         high_score_txt = findViewById(R.id.high_score_txt);
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {

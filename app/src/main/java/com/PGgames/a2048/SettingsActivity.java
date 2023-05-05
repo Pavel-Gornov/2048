@@ -1,4 +1,4 @@
-package com.example.a2048;
+package com.PGgames.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void switch_1_click(View view) {
         switch_1_state = switch_1.isChecked();
     }
+
     public void switch_2_click(View view) {
         switch_2_state = switch_2.isChecked();
     }

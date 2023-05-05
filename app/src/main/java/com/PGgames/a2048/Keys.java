@@ -1,4 +1,4 @@
-package com.example.a2048;
+package com.PGgames.a2048;
 
 public class Keys {
     public static final String HIGH_SCORE_KEY = "HIGH_SCORE";

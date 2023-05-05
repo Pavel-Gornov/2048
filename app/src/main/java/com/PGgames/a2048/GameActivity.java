@@ -1,4 +1,4 @@
-package com.example.a2048;
+package com.PGgames.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
