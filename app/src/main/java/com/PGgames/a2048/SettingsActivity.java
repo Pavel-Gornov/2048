@@ -2,41 +2,37 @@ package com.PGgames.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Switch;
+
+import com.PGgames.a2048.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity {
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    protected Switch switch_1;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    protected Switch switch_2;
+    private ActivitySettingsBinding binding;
+    protected SharedPreferences sharedPref;
     protected boolean switch_1_state;
     protected boolean switch_2_state;
-    protected SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        switch_1 = findViewById(R.id.switch_1);
-        switch_2 = findViewById(R.id.switch_2);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         switch_1_state = sharedPref.getBoolean(Keys.SWITCH_1_KEY, false);
         switch_2_state = sharedPref.getBoolean(Keys.SWITCH_2_KEY, false);
-        switch_1.setChecked(switch_1_state);
-        switch_2.setChecked(switch_2_state);
+        binding.switch1.setChecked(switch_1_state);
+        binding.switch2.setChecked(switch_2_state);
     }
 
     public void switch_1_click(View view) {
-        switch_1_state = switch_1.isChecked();
+        switch_1_state = binding.switch1.isChecked();
     }
 
     public void switch_2_click(View view) {
-        switch_2_state = switch_2.isChecked();
+        switch_2_state = binding.switch2.isChecked();
     }
 
     @Override
