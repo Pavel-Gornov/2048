@@ -11,8 +11,8 @@ android {
         applicationId "com.PGgames.a2048"
         minSdk 26
         targetSdk 33
-        versionCode 2
-        versionName "dev1"
+        versionCode 3
+        versionName "dev2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,6 +43,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation 'com.google.firebase:firebase-database:20.2.1'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'

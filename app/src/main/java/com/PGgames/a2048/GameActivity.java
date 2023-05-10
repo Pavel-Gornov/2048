@@ -14,41 +14,15 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
+import com.PGgames.a2048.databinding.MainGameBinding;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
+    private MainGameBinding binding;
     protected SharedPreferences sharedPref;
-
-    protected ImageView iv1_1;
-    protected ImageView iv1_2;
-    protected ImageView iv1_3;
-    protected ImageView iv1_4;
-    protected ImageView iv2_1;
-    protected ImageView iv2_2;
-    protected ImageView iv2_3;
-    protected ImageView iv2_4;
-    protected ImageView iv3_1;
-    protected ImageView iv3_2;
-    protected ImageView iv3_3;
-    protected ImageView iv3_4;
-    protected ImageView iv4_1;
-    protected ImageView iv4_2;
-    protected ImageView iv4_3;
-    protected ImageView iv4_4;
-
-    protected Button btn_up;
-    protected Button btn_down;
-    protected Button btn_right;
-    protected Button btn_left;
-    protected ImageView img_no_btn;
     protected int score;
-    protected TextView tv_score;
     protected Board TileMap;
     public Bitmap temp;
     public Bitmap n0;
@@ -96,7 +70,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_game);
+        binding = MainGameBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         boolean is_continue = getIntent().getBooleanExtra(Keys.SAVE_KEY, false);
         if (is_continue) {
@@ -110,42 +85,17 @@ public class GameActivity extends AppCompatActivity {
         } else {
             TileMap = new Board();
         }
-        iv1_1 = findViewById(R.id.cell_1_1);
-        iv1_2 = findViewById(R.id.cell_1_2);
-        iv1_3 = findViewById(R.id.cell_1_3);
-        iv1_4 = findViewById(R.id.cell_1_4);
-        iv2_1 = findViewById(R.id.cell_2_1);
-        iv2_2 = findViewById(R.id.cell_2_2);
-        iv2_3 = findViewById(R.id.cell_2_3);
-        iv2_4 = findViewById(R.id.cell_2_4);
-        iv3_1 = findViewById(R.id.cell_3_1);
-        iv3_2 = findViewById(R.id.cell_3_2);
-        iv3_3 = findViewById(R.id.cell_3_3);
-        iv3_4 = findViewById(R.id.cell_3_4);
-        iv4_1 = findViewById(R.id.cell_4_1);
-        iv4_2 = findViewById(R.id.cell_4_2);
-        iv4_3 = findViewById(R.id.cell_4_3);
-        iv4_4 = findViewById(R.id.cell_4_4);
-
-        btn_up = findViewById(R.id.btn_u);
-        btn_down = findViewById(R.id.btn_d);
-        btn_right = findViewById(R.id.btn_r);
-        btn_left = findViewById(R.id.btn_l);
-        img_no_btn = findViewById(R.id.img_no_btn);
-
         if (sharedPref.getBoolean(Keys.SWITCH_1_KEY, false)) {
-            btn_up.setVisibility(View.GONE);
-            btn_down.setVisibility(View.GONE);
-            btn_right.setVisibility(View.GONE);
-            btn_left.setVisibility(View.GONE);
-            img_no_btn.setVisibility(View.VISIBLE);
+            binding.btnU.setVisibility(View.GONE);
+            binding.btnD.setVisibility(View.GONE);
+            binding.btnR.setVisibility(View.GONE);
+            binding.btnL.setVisibility(View.GONE);
+            binding.imgNoBtn.setVisibility(View.VISIBLE);
         }
         if (sharedPref.getBoolean(Keys.SWITCH_2_KEY, false))
             load_textures("tiles_old");
         else
             load_textures("tiles");
-
-        tv_score = findViewById(R.id.score);
         score_text = getResources().getString(R.string.score);
         update();
     }
@@ -202,29 +152,29 @@ public class GameActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void update() {
-        iv1_1.setImageBitmap(get_texture(TileMap.map.get(0).get(0)));
-        iv1_2.setImageBitmap(get_texture(TileMap.map.get(0).get(1)));
-        iv1_3.setImageBitmap(get_texture(TileMap.map.get(0).get(2)));
-        iv1_4.setImageBitmap(get_texture(TileMap.map.get(0).get(3)));
-        iv2_1.setImageBitmap(get_texture(TileMap.map.get(1).get(0)));
-        iv2_2.setImageBitmap(get_texture(TileMap.map.get(1).get(1)));
-        iv2_3.setImageBitmap(get_texture(TileMap.map.get(1).get(2)));
-        iv2_4.setImageBitmap(get_texture(TileMap.map.get(1).get(3)));
-        iv3_1.setImageBitmap(get_texture(TileMap.map.get(2).get(0)));
-        iv3_2.setImageBitmap(get_texture(TileMap.map.get(2).get(1)));
-        iv3_3.setImageBitmap(get_texture(TileMap.map.get(2).get(2)));
-        iv3_4.setImageBitmap(get_texture(TileMap.map.get(2).get(3)));
-        iv4_1.setImageBitmap(get_texture(TileMap.map.get(3).get(0)));
-        iv4_2.setImageBitmap(get_texture(TileMap.map.get(3).get(1)));
-        iv4_3.setImageBitmap(get_texture(TileMap.map.get(3).get(2)));
-        iv4_4.setImageBitmap(get_texture(TileMap.map.get(3).get(3)));
+        binding.cell11.setImageBitmap(get_texture(TileMap.map.get(0).get(0)));
+        binding.cell12.setImageBitmap(get_texture(TileMap.map.get(0).get(1)));
+        binding.cell13.setImageBitmap(get_texture(TileMap.map.get(0).get(2)));
+        binding.cell14.setImageBitmap(get_texture(TileMap.map.get(0).get(3)));
+        binding.cell21.setImageBitmap(get_texture(TileMap.map.get(1).get(0)));
+        binding.cell22.setImageBitmap(get_texture(TileMap.map.get(1).get(1)));
+        binding.cell23.setImageBitmap(get_texture(TileMap.map.get(1).get(2)));
+        binding.cell24.setImageBitmap(get_texture(TileMap.map.get(1).get(3)));
+        binding.cell31.setImageBitmap(get_texture(TileMap.map.get(2).get(0)));
+        binding.cell32.setImageBitmap(get_texture(TileMap.map.get(2).get(1)));
+        binding.cell33.setImageBitmap(get_texture(TileMap.map.get(2).get(2)));
+        binding.cell34.setImageBitmap(get_texture(TileMap.map.get(2).get(3)));
+        binding.cell41.setImageBitmap(get_texture(TileMap.map.get(3).get(0)));
+        binding.cell42.setImageBitmap(get_texture(TileMap.map.get(3).get(1)));
+        binding.cell43.setImageBitmap(get_texture(TileMap.map.get(3).get(2)));
+        binding.cell44.setImageBitmap(get_texture(TileMap.map.get(3).get(3)));
         score = 0;
         for (ArrayList<Integer> i : TileMap.map) {
             for (int j : i) {
                 score += j;
             }
         }
-        tv_score.setText(score_text + ": " + score);
+        binding.score.setText(score_text + ": " + score);
     }
 
     public void up() {
