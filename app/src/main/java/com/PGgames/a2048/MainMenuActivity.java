@@ -39,14 +39,22 @@ public class MainMenuActivity extends AppCompatActivity {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
                 com.google.firebase.database.DataSnapshot res = task.getResult();
-                if (res != null) {
+                if (res.getValue() != null) {
                     String record_string = String.valueOf(res.child("record").getValue());
                     Scanner in = new Scanner(record_string);
                     int record = in.nextInt();
-                    if (record > high_score)
-                        high_score = record;
+                    int high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
+                    if (record > high_score) {
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putInt(Keys.HIGH_SCORE_KEY, record);
+                        editor.apply();
+                    }
+                }
+                else {
+                    update_db();
                 }
                 Log.d(TAG, String.valueOf(res));
+                update_ui();
             }
         });
     }
@@ -55,7 +63,8 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        binding.highScoreTxt.setText(getResources().getString(R.string.your_high_score) + " " + high_score);
+        update_ui();
+
     }
 
     @Override
@@ -105,5 +114,10 @@ public class MainMenuActivity extends AppCompatActivity {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users");
         myRef.child(user_id).child("record").setValue(high_score);
         myRef.push();
+    }
+    @SuppressLint("SetTextI18n")
+    public void update_ui(){
+        high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
+        binding.highScoreTxt.setText(getResources().getString(R.string.your_high_score) + " " + high_score);
     }
 }
