@@ -308,23 +308,27 @@ public class GameActivity extends AppCompatActivity {
 
     public void createOn2048Dialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("2048!")
-                .setMessage("Цель в 2048 достигнута. Можете завершить игру или продолжать.")
-                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity, "Продолжаем!", Toast.LENGTH_SHORT).show())
-                .setNegativeButton("Завершить", (dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
+        builder.setTitle("2048!").
+                setMessage(getResources().getString(R.string.on_2048_message)).
+                setPositiveButton(getResources().getString(R.string.continue_btn),
+                        (dialog, id) -> Toast.makeText(activity, getResources().getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
+                setNegativeButton(getResources().getString(R.string.finish),
+                        (dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
         builder.create().show();
     }
 
     public void createFinalDialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Игра окончена!")
-                .setMessage("Игра окончена, ходов не осталось.")
-                .setNeutralButton("Главное меню", (dialog, id) -> {
-                    startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        builder.setTitle(getResources().getString(R.string.game_over)).
+                setMessage(getResources().getString(R.string.game_over_message)).
+                setNeutralButton(getResources().getString(R.string.main_menu), (dialog, id) -> {
+                    startActivity(new Intent(this, MainMenuActivity.class).
+                            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     TileMap = new Board();
-                })
-                .setPositiveButton("Продолжить", (dialog, id) -> Toast.makeText(activity, "Продолжаем!", Toast.LENGTH_SHORT).show())
-                .setNegativeButton("Новая игра", (dialog, id) -> {
+                }).
+                setPositiveButton(getResources().getString(R.string.continue_btn),
+                        (dialog, id) -> Toast.makeText(activity, getResources().getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
+                setNegativeButton(getResources().getString(R.string.new_game), (dialog, id) -> {
                     save_high_score();
                     TileMap = new Board();
                     is_2048 = false;

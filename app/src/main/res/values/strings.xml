@@ -12,4 +12,10 @@
     <string name="setting_1">Hide buttons</string>
     <string name="your_high_score">Your highest score is</string>
     <string name="setting_2">Old textures</string>
+    <string name="on_2048_message">The goal in 2048 has been reached. You can end the game or continue.</string>
+    <string name="continue_toast">Continue!</string>
+    <string name="main_menu">Main menu</string>
+    <string name="game_over_message">Game over, no moves left.</string>
+    <string name="game_over">Game over!</string>
+    <string name="finish">Finish</string>
 </resources>
