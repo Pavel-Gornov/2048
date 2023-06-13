@@ -11,7 +11,7 @@
     <string name="continue_btn">Продолжить</string>
     <string name="settings">Настройки</string>
     <string name="setting_1">Скрывать кнопки</string>
-    <string name="your_high_score">Ваш рекорд составляет:</string>
+    <string name="your_high_score">Ваш рекорд составляет: %d</string>
     <string name="setting_2">Старые текстуры</string>
     <string name="on_2048_message">" Цель в 2048 достигнута. Можете завершить игру или продолжать. "</string>
     <string name="continue_toast">Продолжаем!</string>
@@ -19,4 +19,6 @@
     <string name="game_over_message">Игра окончена, ходов не осталось.</string>
     <string name="game_over">Игра окончена!</string>
     <string name="finish">Завершить</string>
+    <string name="loading">Загрузка…</string>
+    <string name="leaderboard_results">Вы на %d месте из %d</string>
 </resources>

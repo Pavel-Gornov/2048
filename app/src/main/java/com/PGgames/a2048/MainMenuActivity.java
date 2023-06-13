@@ -12,10 +12,11 @@ import android.util.Log;
 import android.view.View;
 
 import com.PGgames.a2048.databinding.MainMenuBinding;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
     private static final String TAG = "MainMenuActivity";
@@ -25,6 +26,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected String user_id;
     protected int high_score;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +36,31 @@ public class MainMenuActivity extends AppCompatActivity {
         user_id = get_user_id();
         high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users");
-        myRef.child(user_id).get().addOnCompleteListener(task -> {
+        myRef.get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
+                Log.e(TAG, "Ошибка при получении данных!", task.getException());
             } else {
-                com.google.firebase.database.DataSnapshot res = task.getResult();
-                if (res.getValue() != null) {
-                    String record_string = String.valueOf(res.child("record").getValue());
-                    Scanner in = new Scanner(record_string);
-                    int record = in.nextInt();
+                DataSnapshot res = task.getResult();
+                ArrayList<User> users_list = new ArrayList<>();
+                for (DataSnapshot i : res.getChildren()) {
+                    int r = 0;
+                    if (i.child("record").getValue() != null) {
+                        r = Integer.parseInt(String.valueOf(i.child("record").getValue()));
+                    }
+                    users_list.add(new User(i.getKey(), r));
+                }
+                users_list.sort(User::compareTo);
+                int leaderboard_place = users_list.indexOf(get_current_user()) + 1;
+                Log.i(TAG, String.valueOf(leaderboard_place));
+                long players_amount = res.getChildrenCount();
+                if (leaderboard_place > 0)
+                    binding.leaderboardTxt.setText(getString(R.string.leaderboard_results, leaderboard_place, players_amount));
+                else
+                    binding.leaderboardTxt.setText(getString(R.string.leaderboard_results, (players_amount + 1), (players_amount + 1)));
+                if (res.child(user_id).child("record").getValue() == null)
+                    update_db();
+                else {
+                    int record = Integer.parseInt(String.valueOf(res.child(user_id).child("record").getValue()));
                     int high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
                     if (record > high_score) {
                         SharedPreferences.Editor editor = sharedPref.edit();
@@ -50,21 +68,47 @@ public class MainMenuActivity extends AppCompatActivity {
                         editor.apply();
                     }
                 }
-                else {
-                    update_db();
-                }
-                Log.d(TAG, String.valueOf(res));
                 update_ui();
             }
         });
+        update_ui();
     }
 
     @SuppressLint("SetTextI18n")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        update_ui();
+    public void update_ui() {
+        high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
+        binding.highScoreTxt.setText(getString(R.string.your_high_score, high_score));
+    }
 
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, high_score);
+        update_db();
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users");
+        myRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Ошибка при получении данных!", task.getException());
+            } else {
+                DataSnapshot res = task.getResult();
+                ArrayList<User> users_list = new ArrayList<>();
+                for (DataSnapshot i : res.getChildren()) {
+                    int r = 0;
+                    if (i.child("record").getValue() != null) {
+                        r = Integer.parseInt(String.valueOf(i.child("record").getValue()));
+                    }
+                    users_list.add(new User(i.getKey(), r));
+                }
+                users_list.sort(User::compareTo);
+                int leaderboard_place = users_list.indexOf(get_current_user()) + 1;
+                if (leaderboard_place > 0) {
+                    binding.leaderboardTxt.setText(getString(R.string.leaderboard_results, leaderboard_place, res.getChildrenCount()));
+                }
+            }
+        });
+        update_ui();
     }
 
     @Override
@@ -115,9 +159,8 @@ public class MainMenuActivity extends AppCompatActivity {
         myRef.child(user_id).child("record").setValue(high_score);
         myRef.push();
     }
-    @SuppressLint("SetTextI18n")
-    public void update_ui(){
-        high_score = sharedPref.getInt(Keys.HIGH_SCORE_KEY, 0);
-        binding.highScoreTxt.setText(getResources().getString(R.string.your_high_score) + " " + high_score);
+
+    public User get_current_user() {
+        return new User(user_id, high_score);
     }
 }

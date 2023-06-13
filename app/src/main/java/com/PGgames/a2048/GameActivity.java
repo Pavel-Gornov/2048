@@ -15,7 +15,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
 import com.PGgames.a2048.databinding.MainGameBinding;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -96,7 +98,7 @@ public class GameActivity extends AppCompatActivity {
             load_textures("tiles_old");
         else
             load_textures("tiles");
-        score_text = getResources().getString(R.string.score);
+        score_text = getString(R.string.score);
         update();
     }
 
@@ -309,26 +311,26 @@ public class GameActivity extends AppCompatActivity {
     public void createOn2048Dialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("2048!").
-                setMessage(getResources().getString(R.string.on_2048_message)).
-                setPositiveButton(getResources().getString(R.string.continue_btn),
-                        (dialog, id) -> Toast.makeText(activity, getResources().getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
-                setNegativeButton(getResources().getString(R.string.finish),
+                setMessage(getString(R.string.on_2048_message)).
+                setPositiveButton(getString(R.string.continue_btn),
+                        (dialog, id) -> Toast.makeText(activity, getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
+                setNegativeButton(getString(R.string.finish),
                         (dialog, id) -> startActivity(new Intent(this, MainMenuActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
         builder.create().show();
     }
 
     public void createFinalDialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(getResources().getString(R.string.game_over)).
-                setMessage(getResources().getString(R.string.game_over_message)).
-                setNeutralButton(getResources().getString(R.string.main_menu), (dialog, id) -> {
+        builder.setTitle(getString(R.string.game_over)).
+                setMessage(getString(R.string.game_over_message)).
+                setNeutralButton(getString(R.string.main_menu), (dialog, id) -> {
                     startActivity(new Intent(this, MainMenuActivity.class).
                             setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     TileMap = new Board();
                 }).
-                setPositiveButton(getResources().getString(R.string.continue_btn),
-                        (dialog, id) -> Toast.makeText(activity, getResources().getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
-                setNegativeButton(getResources().getString(R.string.new_game), (dialog, id) -> {
+                setPositiveButton(getString(R.string.continue_btn),
+                        (dialog, id) -> Toast.makeText(activity, getString(R.string.continue_toast), Toast.LENGTH_SHORT).show()).
+                setNegativeButton(getString(R.string.new_game), (dialog, id) -> {
                     save_high_score();
                     TileMap = new Board();
                     is_2048 = false;
