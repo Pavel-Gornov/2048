@@ -41,7 +41,8 @@ public class GameActivity extends AppCompatActivity {
     public Bitmap n2048;
     public String score_text;
 
-    public final float sensitivity = 100;
+    public final float SENSITIVITY = 100f;
+    public static final String DEFLATE_BOARD_STATE = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
     protected boolean is_2048 = false;
 
     protected GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
@@ -49,13 +50,13 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                float velocityY) {
-            if ((e1.getX() - e2.getX()) > sensitivity) {
+            if ((e1.getX() - e2.getX()) > SENSITIVITY) {
                 left();
-            } else if ((e2.getX() - e1.getX()) > sensitivity) {
+            } else if ((e2.getX() - e1.getX()) > SENSITIVITY) {
                 right();
-            } else if ((e1.getY() - e2.getY()) > sensitivity) {
+            } else if ((e1.getY() - e2.getY()) > SENSITIVITY) {
                 up();
-            } else if ((e2.getY() - e1.getY()) > sensitivity) {
+            } else if ((e2.getY() - e1.getY()) > SENSITIVITY) {
                 down();
             }
             return true;
@@ -77,7 +78,7 @@ public class GameActivity extends AppCompatActivity {
         sharedPref = getSharedPreferences(Keys.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         boolean is_continue = getIntent().getBooleanExtra(Keys.SAVE_KEY, false);
         if (is_continue) {
-            TileMap = new Board(sharedPref.getString(Keys.SAVE_KEY, Keys.DEFLATE_BOARD_STATE));
+            TileMap = new Board(sharedPref.getString(Keys.SAVE_KEY, DEFLATE_BOARD_STATE));
             for (int i = 0; i < 4; i++) {
                 if (TileMap.map.get(i).contains(2048)) {
                     is_2048 = true;

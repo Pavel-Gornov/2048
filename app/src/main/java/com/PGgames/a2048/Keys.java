@@ -8,7 +8,6 @@ public class Keys {
     public static final String SWITCH_2_KEY = "SWITCH_2_KEY";
     public static final String SAVE_KEY = "SAVE_KEY";
     public static final String PREFERENCE_FILE_KEY = "com.PGgames.a2048.pref";
-    public static final String DEFLATE_BOARD_STATE = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
     public static final String USER_ID_KEY = "USER_ID_KEY";
 }
 
